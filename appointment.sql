@@ -46,3 +46,48 @@ create table orders (
     primary key(id)
 ) comment '预约表' ;
 
+create table sign_in (
+    id int not null auto_increment comment '自增主键',
+    user_id varchar(32) not null comment '读者编号',
+    seat_id varchar(32) not null comment '座位编号',
+    order_time timestamp(8) comment '预约时间',
+    sign_in_time timestamp not null default current_timestamp comment '签到时间',
+    sign_in_type tinyint(2) comment '签到类别',
+    primary key(id)
+) comment '签到表' ;
+
+create table sign_out (
+    id int not null auto_increment comment '自增主键',
+    user_id varchar(32) not null comment '读者编号',
+    seat_id varchar(32) not null comment '座位编号',
+    order_time timestamp(8) comment '预约时间',
+    sign_out_type tinyint(2) comment '签离类别',
+    sign_out_time timestamp not null default current_timestamp comment '签离时间',
+    primary key(id)
+) comment '签离表' ;
+
+create table inobservance_type (
+    inobservance_type_id int not null comment '违规类别编号',
+    inboservance_type_name varchar(32) not null comment '违规类别名称',
+    primary key(inobservance_type)
+) comment '违规类别表' ;
+
+create table inobservance (
+    id int not null auto_increment comment '自增主键',
+    user_id varchar(32) not null comment '读者编号',
+    seat_id varchar(32) not null comment '座位编号',
+    order_time timestamp(8) comment '预约时间',
+    inobservance_type int not null comment '违规类别',
+    create_time timestamp not null comment default current_timestamp comment '生成记录时间',
+    primary key(id)
+) comment '违规记录表' ;
+
+create table blacklist (
+    id int not null auto_increment comment '自增主键',
+    user_id varchar(32) not null comment '读者编号',
+    inobservance_type_id int not null comment '违规类别',
+    count int not null comment '违规次数',
+    update_time timestamp not null default current_timestamp on update current_timestamp comment '修改时间',
+    primary key(id)
+) comment '黑名单表' ;
+
