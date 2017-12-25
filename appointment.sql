@@ -29,43 +29,20 @@ create table reading_room (
     foreign key(floor_id) references floor(floor_id) on delete set null
 ) comment '阅览室表' ;
 
-create
-table seat (
-
+create table seat (
     seat_id varchar(32) not null comment '座位编号',
-
-    seat_status tinyint(2) default '0' comment
-'使用状态',
-
+    seat_status tinyint(2) default '0' comment '使用状态',
     reading_room_id varchar(32) comment '座位所属阅览室',
-
     primary key(seat_id),
+    foreign key(reading_room_id) references reading_room(reading_room_id) on delete set null
+) comment '座位表' ;
 
-    foreign key(reading_room_id) references
-reading_room(reading_room_id) on delete set null
-
-)
-comment '座位表' ;
-
- 
-
-create
-table order (
-
+create table orders (
     id int not null auto_increment comment '自增主键',
-
     user_id varchar(32) not null comment '读者编号',
-
     seat_id varchar(32) not null comment '座位编号',
-
-    order_time timestamp(8) not null default
-current_timestamp comment '预约时间',
-
-    create_time timestamp not null default
-current_timestamp comment '创建时间',
-
+    order_time timestamp(8) not null default current_timestamp comment '预约时间',
+    create_time timestamp not null default current_timestamp comment '创建时间',
     primary key(id)
-
-)
-comment '预约表' ;
+) comment '预约表' ;
 
