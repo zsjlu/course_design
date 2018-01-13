@@ -24,5 +24,19 @@ public interface SeatService {
     /**查询没有被释放的座位*/
     public List<Seat> findBySeatStatusNot(Integer seatStatus);
 
+    /**系统自动分配一个座位*/
+    public Seat getOneSeat(Integer seatStatus);
+
+    /**系统根据阅览室自动分配一个座位*/
+    public Seat getOneSeatByReadingRoom(String readingRoomId);
+
+    /**查询所有座位*/
+    public List<Seat> findAll();
+
+    /**根据阅览室编号查询*/
+    public List<Seat> findByReadingRoomId(String readingRoomId);
+
+    /**查询阅览室里可用的座位数量*/
+    public Integer findUsableCountByReadingRoom(Integer seatStatus, String readingRoomId);
 
 }

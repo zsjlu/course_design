@@ -5,7 +5,9 @@ import cn.edu.ujs.repository.BlacklistRepository;
 import cn.edu.ujs.service.BlacklistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ public class BlacklistServiceImpl implements BlacklistService {
     @Autowired
     private BlacklistRepository blacklistRepository;
 
-    @Value("{$library.inobservanceCount}")
+    @Value("${library.inobservanceCount}")
     private Integer inobservanceCount;
 
     @Override
@@ -72,6 +74,18 @@ public class BlacklistServiceImpl implements BlacklistService {
     @Override
     public Blacklist findForbiddenRecord(String userId) {
         return null;
+    }
+
+    @Override
+    @Transactional
+    public Integer deleteByUserIdAndInobservanceTypeId(String userId, Integer inobservanceTypeId) {
+        return blacklistRepository.deleteByUserIdAndInobservanceTypeId(userId,inobservanceTypeId);
+    }
+
+    @Override
+    @Transactional
+    public Integer deleteByIdIn(List<Integer> idList) {
+        return blacklistRepository.deleteByIdIn(idList);
     }
 
 }

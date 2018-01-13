@@ -6,8 +6,16 @@ import cn.edu.ujs.entity.Seat;
 import cn.edu.ujs.exception.ReserveException;
 import cn.edu.ujs.service.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.http.ResponseEntity;
+import org.springframework.session.Session;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by DELL on 2017/12/25.
@@ -21,10 +29,33 @@ public class helloController {
     @Autowired
     private MyConfig myConfig;
 
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @RequestMapping(value = "/hello")
     public String hello() {
 
+        //String redisValue = stringRedisTemplate.opsForValue().get("3140602023");
+
         return myConfig.getOpenTime();
+    }
+
+    @RequestMapping("/index")
+    public String index(@RequestParam String userId, HttpSession httpSession) {
+
+        httpSession.setAttribute(userId,userId);
+        System.out.println(httpSession.getAttribute(userId));
+        //return ResponseEntity.ok("ok");
+        return httpSession.getAttribute(userId).toString();
+    }
+
+    @RequestMapping("/hellow")
+    public String helloworld(@RequestParam String userId, HttpSession httpSession) {
+
+        System.out.println(httpSession.getAttribute(userId));
+        System.out.println();
+        return httpSession.getAttribute(userId).toString();
+        //return ResponseEntity.ok(httpSession.getAttribute(userId));
     }
 
     @RequestMapping("/task1")

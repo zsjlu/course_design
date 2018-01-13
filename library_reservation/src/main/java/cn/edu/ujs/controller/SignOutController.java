@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by DELL on 2017/12/28.
@@ -52,9 +54,20 @@ public class SignOutController {
     @Value("${library.reservedTime.temporaryLeave}")
     private Integer reservedTimeForTemporaryLeave;
 
+    @RequestMapping(value = "/record")
+    public List<SignOut> findSignOutRecord(@RequestParam(required = false) String userId) {
+        List<SignOut> signOutList;
+        if (userId == null) {
+            signOutList = signOutService.findAll();
+        }
+        else {
+            signOutList = signOutService.findByUserId(userId);
+        }
+        return signOutList;
+    }
     @RequestMapping(value = "/temporary")
-    public ResultVO temporarySignOut(@RequestParam String userId) {
-
+    public ResultVO temporarySignOut(@RequestParam(required = false) String userId) {
+        //userId = httpSession.getAttribute("user").toString();
         ResultVO resultVO = null;
         UserInfo userInfo = userInfoService.findOne(userId);
         Reserve todayReserve = null;
@@ -132,7 +145,8 @@ public class SignOutController {
     }
 
     @RequestMapping(value = "/final")
-    public ResultVO finalSignOut(@RequestParam String userId) {
+    public ResultVO finalSignOut(@RequestParam(required = false) String userId) {
+        //userId = httpSession.getAttribute("user").toString();
         ResultVO resultVO = null;
         UserInfo userInfo = userInfoService.findOne(userId);
         Reserve todayReserve = null;

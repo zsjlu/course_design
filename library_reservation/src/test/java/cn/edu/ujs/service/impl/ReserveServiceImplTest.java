@@ -9,7 +9,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -75,4 +77,13 @@ public class ReserveServiceImplTest {
         List<Reserve> reserveList = reserveService.findByReserveTime(TimeUtil.longStrToDate("2017-12-29 17:55:14"));
         Assert.assertNotEquals(0,reserveList.size());
     }
+/*
+    @Test
+    //@Transactional
+    public void testDeleteByIdIn() throws Exception {
+        List<Integer> integers = Arrays.asList(189,190);
+        Integer result = reserveService.deleteByIdIn(integers);
+        Assert.assertNotNull(result);
+    }
+    */
 }

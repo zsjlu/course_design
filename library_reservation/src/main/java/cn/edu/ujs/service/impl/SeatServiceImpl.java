@@ -43,4 +43,30 @@ public class SeatServiceImpl implements SeatService {
     public List<Seat> findBySeatStatusNot(Integer seatStatus) {
         return seatRepository.findBySeatStatusNot(seatStatus);
     }
+
+    @Override
+    public Seat getOneSeat(Integer seatStatus) {
+        return seatRepository.findTopBySeatStatus(seatStatus);
+    }
+
+    @Override
+    public Seat getOneSeatByReadingRoom(String readingRoomId) {
+        return seatRepository.findTopByReadingRoomId(readingRoomId);
+    }
+
+    @Override
+    public List<Seat> findAll() {
+        return seatRepository.findAll();
+    }
+
+    @Override
+    public List<Seat> findByReadingRoomId(String readingRoomId) {
+        return seatRepository.findByReadingRoomId(readingRoomId);
+    }
+
+    @Override
+    public Integer findUsableCountByReadingRoom(Integer seatStatus, String readingRoomId) {
+        return seatRepository.findUsableCountByReadingRoom(seatStatus, readingRoomId);
+    }
+
 }

@@ -18,11 +18,18 @@ public enum ResultEnum {
 
     NOT_SIGN_IN(12,"当天还未签到"),
 
-    SUCCESS_TEMPORARY_SIGN_OUT(21,"临时签离成功"),
+    SUCCESS_TEMPORARY_SIGN_OUT(20,"临时签离成功"),
+    NOT_TEMPORARY_SIGN_OUT(21,"离开未进行临时签离"),
     ALREADY_TEMPORARY_SIGN_OUT(22,"已经临时签离"),
     ALREADY_FINAL_SIGN_OUT(23,"当天已签离"),
     SUCCESS_SIGN_OUT(24,"签离成功"),
+
+
+    SUCCESS_LOGIN(30,"登录成功"),
+    ERROR_LOGIN(31,"用户名或密码不正确"),
+    SUCCESS_LOGIN_OUT(32,"登出成功")
     ;
+
 
     private Integer code;
 

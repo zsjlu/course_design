@@ -26,4 +26,9 @@ public interface BlacklistService {
 
     /**找出被禁止的那一条记录*/
     Blacklist findForbiddenRecord(String userId);
+
+    Integer deleteByUserIdAndInobservanceTypeId(String userId, Integer inobservanceTypeId);
+
+    /**根据id批量删除*/
+    Integer deleteByIdIn(List<Integer> idList);
 }

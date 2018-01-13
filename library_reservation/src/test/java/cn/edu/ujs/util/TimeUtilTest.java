@@ -69,4 +69,17 @@ public class TimeUtilTest {
         Assert.assertEquals(flag,true);
     }
 
+    @Test
+    public void testCountDays() throws Exception {
+        long days = TimeUtil.countDays(TimeUtil.longStrToDate("2017-12-12 12:12:20"),TimeUtil.longStrToDate("2017-12-13 12:12:12"));
+                Assert.assertNotEquals(0,days);
+    }
+
+    @Test
+    public void testCountHours() throws Exception {
+        long hours = TimeUtil.countHours(TimeUtil.longStrToDate("2017-12-12 12:12:21"),
+                TimeUtil.longStrToDate("2017-12-13 12:12:20"));
+        Assert.assertNotEquals(0,hours);
+    }
+
 }

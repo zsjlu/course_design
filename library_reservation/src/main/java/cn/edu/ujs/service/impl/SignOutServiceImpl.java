@@ -6,6 +6,8 @@ import cn.edu.ujs.service.SignOutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by DELL on 2017/12/28.
  */
@@ -18,5 +20,15 @@ public class SignOutServiceImpl implements SignOutService {
     @Override
     public SignOut update(SignOut signOut) {
         return signOutRespoitory.save(signOut);
+    }
+
+    @Override
+    public List<SignOut> findByUserId(String userId) {
+        return signOutRespoitory.findByUserId(userId);
+    }
+
+    @Override
+    public List<SignOut> findAll() {
+        return signOutRespoitory.findAll();
     }
 }

@@ -5,7 +5,10 @@ import cn.edu.ujs.repository.ReserveRepository;
 import cn.edu.ujs.service.ReserveService;
 import cn.edu.ujs.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -68,6 +71,27 @@ public class ReserveServiceImpl implements ReserveService {
     @Override
     public List<Reserve> findByReserveTime(Date date) {
         return reserveRepository.findByReserveTime(date);
+    }
+
+    @Override
+    public Page<Reserve> findAll(Pageable pageable) {
+        return reserveRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Reserve> findAll() {
+        return reserveRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public Integer deleteByIdIn(List<Integer> integers) {
+        Integer result = 0;
+        //for (Integer integer : integers) {
+           // result += reserveRepository.deleteById(integer);
+        //}
+        result = reserveRepository.deleteByIdIn(integers);
+        return result;
     }
 
 

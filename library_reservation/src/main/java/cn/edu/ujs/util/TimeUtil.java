@@ -162,6 +162,12 @@ public class TimeUtil {
         return dateStr;
     }
 
+    public static String dateToShortString(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = simpleDateFormat.format(date);
+        return dateStr;
+    }
+
     /**
      * 获取指定日期的时
      * @param date
@@ -245,6 +251,30 @@ public class TimeUtil {
         Date date2 = longStrToDate(dateStr2);
         boolean flag = date1.equals(date2);
         return flag;
+    }
+
+    /**
+     * 计算两个日期的天数差
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static long countDays(Date date1, Date date2) {
+        //long time1 = date1.getTime();
+        //long time2 = date2.getTime();
+        long difference =  (date1.getTime()-date2.getTime())/86400000;
+        return Math.abs(difference);
+    }
+
+    /**
+     * 计算两个日期的小时差
+     * @param date1
+     * @param date2
+     * @return
+     */
+    public static long countHours(Date date1, Date date2) {
+        long difference = (date1.getTime()-date2.getTime())/(1000*60*60);
+        return Math.abs(difference);
     }
 
 }

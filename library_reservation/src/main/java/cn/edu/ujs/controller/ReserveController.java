@@ -22,11 +22,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -61,20 +64,48 @@ public class ReserveController {
     @Value("${library.reserve.forbidTime}")
     private Integer forbidTimeForReserve;
 
-    @Value("${library.inobservanceTime}")
-
     @Autowired
     private DynamicTisk dynamicTisk;
 
     @Autowired
     private CheckSignInRunnable checkSignInRunnable;
 
-    @RequestMapping
-    public ResultVO reserve(@RequestParam String userId,
-                        @RequestParam String seatId,
-                        @RequestParam String reserveTime) {
+    @RequestMapping(value = "/record")
+    public List<Reserve> getReserveRecord(@RequestParam(required = false) String userId) {
+        List<Reserve> reserveList = reserveService.findByUserId(userId);
+        return reserveList;
+    }
 
-        // TODO: 2017/12/29 还需要验证是否临时签离未刷卡 
+    @RequestMapping(value = "/record2")
+    public List<Reserve> getPageReserveRecord(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                              @RequestParam(value = "size", defaultValue = "2") Integer size) {
+        PageRequest pageRequest = new PageRequest(page,size);
+        Page<Reserve> reservePage = reserveService.findAll(pageRequest);
+        return reservePage.getContent();
+    }
+
+    @RequestMapping(value = "/record3")
+    public List<Reserve> getAllReserveRecord(@RequestParam(required = false) String userId) {
+        List<Reserve> reserveList;
+        if (userId == null) {
+            reserveList = reserveService.findAll();
+        }
+        else {
+            reserveList = reserveService.findByUserId(userId);
+        }
+
+        return reserveList;
+    }
+
+    @RequestMapping
+    public ResultVO reserve(@RequestParam(required = false) String userId,
+                            @RequestParam String seatId,
+                            @RequestParam String reserveTime) {
+
+        // TODO: 2017/12/29 还需要验证是否临时签离未刷卡
+
+        //System.out.println(httpSession.getAttribute("user").toString());
+        //userId = httpSession.getAttribute("user").toString();
         ResultVO resultVO = null;
         Reserve reserve = null;
         Seat seat = null;
@@ -82,20 +113,21 @@ public class ReserveController {
         Blacklist blackList = blackListService.isForbidden(userId);
         //检查黑名单是否被禁止预约
         if (blackList != null) {
-            //计算多少天后可以重新预约
-            Date reservableTime = TimeUtil.addHour(blackList.getUpdateTime(),forbidTimeForReserve);
-            //如果预约时间没过禁止时间，直接返回
-            if (reservableTime.before(new Date())) {
-                //计算还有多少时间
-                // TODO: 2017/12/30 可以直接计算时间，不用先判断再计算时间 
+            //计算最后一次违规的日期与当前日期的小时差
+            long hours = TimeUtil.countHours(new Date(),blackList.getUpdateTime());
+            //如果还在禁止范围时间内，相应提示
+            if (hours <= forbidTimeForReserve) {
                 resultVO = ResultVOUtil.error(ResultEnum.FORBID_RESERVE.getCode(),
-                        ResultEnum.FORBID_RESERVE.getMessage());
+                        ResultEnum.FORBID_RESERVE.getMessage()+","+(forbidTimeForReserve-hours)+"小时后方可预约");
+                return resultVO;
             }
-            
-            return resultVO;
+            //如果禁止时间已到，消除黑名单相应数据
+            blackListService.deleteByUserIdAndInobservanceTypeId(userId,blackList.getInobservanceTypeId());
+
         }
 
         //如果预约的是当天的座位
+        //String todaytime = TimeUtil.getDateShort();
         if (reserveTime.equals(TimeUtil.getDateShort())) {
             seat = seatService.findOne(seatId);
             //如果该座位不可用，直接返回
@@ -256,6 +288,8 @@ public class ReserveController {
             }
             */
     }
+
+
 
     /**
      * 更新用户状态信息为当天已预约

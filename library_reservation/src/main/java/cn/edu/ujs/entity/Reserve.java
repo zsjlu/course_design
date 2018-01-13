@@ -1,5 +1,9 @@
 package cn.edu.ujs.entity;
 
+import cn.edu.ujs.util.serializer.Date2LongSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

@@ -1,5 +1,26 @@
 use library_reservation;
 
+create table my_date (
+    date timestamp not null comment '为了与预约表左连接',
+    primary key(date)
+) comment '时间表' ;
+
+insert into my_date values('2018-01-01 08:00:00');
+insert into my_date values('2018-01-01 09:00:00');
+insert into my_date values('2018-01-01 10:00:00');
+insert into my_date values('2018-01-01 11:00:00');
+insert into my_date values('2018-01-01 12:00:00');
+insert into my_date values('2018-01-01 13:00:00');
+insert into my_date values('2018-01-01 14:00:00');
+insert into my_date values('2018-01-01 15:00:00');
+insert into my_date values('2018-01-01 16:00:00');
+insert into my_date values('2018-01-01 17:00:00');
+insert into my_date values('2018-01-01 18:00:00');
+insert into my_date values('2018-01-01 19:00:00');
+insert into my_date values('2018-01-01 20:00:00');
+insert into my_date values('2018-01-01 21:00:00');
+insert into my_date values('2018-01-01 22:00:00');
+
 create table college (
     college_id int not null comment '学院编号',
     college_name varchar(32) not null comment '学院名称',

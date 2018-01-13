@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.integration.IntegrationAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -52,5 +53,17 @@ public class SeatServiceImplTest {
 
         List<Seat> seatList = seatService.findBySeatStatusNot(SeatStatusEnum.BEING_SIGN_IN.getCode());
         Assert.assertNotEquals(0,seatList.size());
+    }
+
+    @Test
+    public void testGetOneSeat() throws Exception {
+        Seat seat = seatService.getOneSeat(0);
+        Assert.assertNotNull(seat);
+    }
+
+    @Test
+    public void testFindCountBySeatStatus() throws Exception {
+        Integer count = seatService.findUsableCountByReadingRoom(SeatStatusEnum.NOT_BEING_RESERVED.getCode(),"101-1001");
+        Assert.assertNotEquals(new Integer(0),count);
     }
 }

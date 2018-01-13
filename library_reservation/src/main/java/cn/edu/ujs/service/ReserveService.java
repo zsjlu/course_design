@@ -1,6 +1,9 @@
 package cn.edu.ujs.service;
 
 import cn.edu.ujs.entity.Reserve;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -36,4 +39,12 @@ public interface ReserveService {
     List<Reserve> findBySeatIdAndReserveTimeBetween(String seatId, Date startTime, Date endTime);
 
     List<Reserve> findByReserveTime(Date date);
+
+    Page<Reserve> findAll(Pageable pageable);
+
+    List<Reserve> findAll();
+
+    /**批量删除*/
+    @Transactional
+    Integer deleteByIdIn(List<Integer> integers);
 }

@@ -52,6 +52,11 @@ public class BlacklistServiceImplTest {
     @Test
     public void testIsForbidden() throws Exception {
 
+    }
 
+    @Test
+    public void testDeleteByUserIdAndInobservanceTypeId() throws Exception {
+        Integer blacklist = blacklistService.deleteByUserIdAndInobservanceTypeId("3140602023",1);
+        Assert.assertNotNull(blacklist);
     }
 }
