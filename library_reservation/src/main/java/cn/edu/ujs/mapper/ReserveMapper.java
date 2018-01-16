@@ -52,7 +52,7 @@ public interface ReserveMapper {
 
     //根据阅览室
     // TODO: 2018/1/9 这里是通过截取字符串的形式来获得阅览室编号，如果后续编号长度改变，此SQL语句也需要改变
-    @Select("select reading_room_name as name,count(left(seat_id,8)) as value from reservation,reading_room where reading_room.reading_room_id=left(seat_id,8) group by left(seat_id,8)")
+    @Select("select reading_room_name as name,count(left(seat_id,4)) as value from reservation,reading_room where reading_room.reading_room_id=left(seat_id,4) group by left(seat_id,4)")
     List<Map<String,Integer>> countByReadingRoom();
 
     //根据座位
@@ -95,7 +95,19 @@ public interface ReserveMapper {
     //根据阅览室select reading_room.reading_room_name,reserve_time from reservation,seat,reading_room where reservation.seat_id=seat.seat_id and seat.reading_room_id=reading_room.reading_room_id order by reservation.id
 
     //分星期统计
+    // TODO: 2018/1/16 没有预约的那一天不会显示，后续与my_week左连接改进 
     @Select("select (case date_format(reserve_time,'%w') when 1 then '周一' when 2 then '周二' when 3 then '周三' when 4 then '周四' when 5 then '周五' when 6 then '周六' when 0 then '周日' end) as name,count(date_format(reserve_time,'%w')) as value  from reservation group by name order by date_format(reserve_time,'%w')")
+    @Results({
+            @Result(column = "name", property = "name"),
+            @Result(column = "value", property = "value")
+    })
+    List<Map<String,Integer>> countByWeek2();
+    
+    //那一周的某天没有会显示0
+    // TODO: 2018/1/16 后续改成范围在一段时间内
+    @Select("select mw.week as name,count(r.id)value " +
+            "from my_week mw left join reservation r " +
+            "on date_format(r.reserve_time,'%w')=mw.id group by mw.id")
     @Results({
             @Result(column = "name", property = "name"),
             @Result(column = "value", property = "value")
@@ -119,5 +131,8 @@ public interface ReserveMapper {
             @Result(column = "value", property = "value")
     })
     List<Map<String,Integer>> countByTime(String reserveTime);
+
+    //统计每个阅览室每周的七天预约了多少座位：
+    // select reading_room_id id,reading_room_name name,date_format(reserve_time,'%w')week,count(*)value from reservation,reading_room where reading_room.reading_room_id=left(seat_id,4) group by name,week
 
 }

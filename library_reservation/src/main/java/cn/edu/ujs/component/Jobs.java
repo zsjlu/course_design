@@ -46,7 +46,7 @@ public class Jobs {
     /**每天8:30定时执行任务检查需要在8:30之前签到的读者*/
     @Scheduled(cron = "0 30 8 * * ?")
     public void checkSignIn() {
-        String dateStr = TimeUtil.getDateShort() + openTime;
+        String dateStr = TimeUtil.getDateShort() + ' ' + openTime;
         List<Reserve> reserveList = reserveService.findByReserveTime(TimeUtil.longStrToDate(dateStr));
         UserInfo userInfo = null;
         String userId = null;

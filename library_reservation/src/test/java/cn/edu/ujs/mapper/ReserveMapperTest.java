@@ -41,7 +41,7 @@ public class ReserveMapperTest {
     @Test
     public void testFindByUserIdAndReserveTime() throws Exception {
 
-        List<Reserve> reserveList = reserveMapper.findByUserIdAndReserveTime("3140602023","2018-01-01");
+        List<Reserve> reserveList = reserveMapper.findByUserIdAndReserveTime("3130602024","2018-01-13");
         Assert.assertNotEquals(0,reserveList.size());
     }
 

@@ -1,6 +1,8 @@
 package cn.edu.ujs.entity;
 
 
+import antlr.StringUtils;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -43,5 +45,10 @@ public class Seat {
 
     public void setReadingRoomId(String readingRoomId) {
         this.readingRoomId = readingRoomId;
+    }
+
+    public Integer getLastSeatId() {
+        String id = this.getSeatId().substring(5);
+        return new Integer(id);
     }
 }

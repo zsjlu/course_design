@@ -32,4 +32,8 @@ public interface SeatRepository extends JpaRepository<Seat, String> {
     //注：Seat是class名，并不是表名
     @Query("select count(s) from Seat s where s.seatStatus=?1 and s.readingRoomId=?2")
     Integer findUsableCountByReadingRoom(Integer seatStatuse, String readingRoomId);
+
+    /**查询某个阅览室的最后一个座位的编号
+    @Query("select * from Seat s where s.readingRoomId =?1 order by s.seatId desc limit 1")
+    Seat findLastSeat(String readRoomId);*/
 }

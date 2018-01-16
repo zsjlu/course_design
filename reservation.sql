@@ -21,6 +21,20 @@ insert into my_date values('2018-01-01 20:00:00');
 insert into my_date values('2018-01-01 21:00:00');
 insert into my_date values('2018-01-01 22:00:00');
 
+create table my_week (
+    id tinyint not null comment '0-6表示周日到周六',
+    week varchar(32) not null comment '为了与预约表左连接',
+    primary KEY(id)
+) comment '星期表' ;
+
+insert into my_week values(1,'周一');
+insert into my_week values(2,'周二');
+insert into my_week values(3,'周三');
+insert into my_week values(4,'周四');
+insert into my_week values(5,'周五');
+insert into my_week values(6,'周六');
+insert into my_week values(0,'周日');
+
 create table college (
     college_id int not null comment '学院编号',
     college_name varchar(32) not null comment '学院名称',
@@ -77,6 +91,11 @@ create table user (
     foreign key(degree_id) references degree(degree_id) on delete set null
 ) comment '用户表';
 
+insert into user(user_id,user_name,user_password,college_id,degree_id) values('3140602019','朱宇','123456',1001,11);
+insert into user(user_id,user_name,user_password,college_id,degree_id) values('3140602020','赵胜杰','123456',1001,11);
+insert into user(user_id,user_name,user_password,college_id,degree_id) values('3140602021','张腾','123456',1001,11);
+insert into user(user_id,user_name,user_password,college_id,degree_id) values('3140602022','周怡涛','123456',1001,11);
+
 insert into user(user_id,user_name,user_password,college_id,degree_id,phone,email) values('3140602023','陆健','123456',1001,11,'18852852189','1370256381@qq.com');
 insert into user(user_id,user_name,user_password,college_id,degree_id) values('3140602024','张家辉','123456',1001,11);
 insert into user(user_id,user_name,user_password,college_id,degree_id) values('3140602025','朱俊豪','123456',1001,11);
@@ -116,12 +135,12 @@ create table floor (
     primary key(floor_id)
 ) comment '楼层表' ; 
 
-insert into floor(floor_id, floor_name) values('101','新图书馆一楼');
-insert into floor(floor_id, floor_name) values('102','新图书馆二楼');
-insert into floor(floor_id, floor_name) values('103','新图书馆三楼');
-insert into floor(floor_id, floor_name) values('104','新图书馆四楼');
-insert into floor(floor_id, floor_name) values('105','新图书馆五楼');
-insert into floor(floor_id, floor_name) values('106','新图书馆六楼');
+insert into floor(floor_id, floor_name) values('1','新图书馆一楼');
+insert into floor(floor_id, floor_name) values('2','新图书馆二楼');
+insert into floor(floor_id, floor_name) values('3','新图书馆三楼');
+insert into floor(floor_id, floor_name) values('4','新图书馆四楼');
+insert into floor(floor_id, floor_name) values('5','新图书馆五楼');
+insert into floor(floor_id, floor_name) values('6','新图书馆六楼');
 
 create table reading_room (
     reading_room_id varchar(32) not null comment '阅览室编号',
@@ -132,13 +151,41 @@ create table reading_room (
     foreign key(floor_id) references floor(floor_id) on delete set null
 ) comment '阅览室表' ;
 
-insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('101-1001','社会科学图书阅览室','101',100);
-insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('101-1002','自然科学图书阅览室','101',100);
-insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('101-1003','综合阅览室','101',100);
+ALTER TABLE reading_room ALTER COLUMN seat_count set DEFAULT '0';
 
-insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('101-1004','二楼综合阅览室','102',100);
-insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('101-1005','二楼密集书库','102',100);
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('1-01','新书借阅','1',100);
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('1-02','报刊借阅','1',100);
 
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('2-01','自然科学图书借阅(A区)','2',100);
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('2-02','自然科学图书借阅(B区)','2',100);
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('2-03','电子阅览','2',100);
+
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('3-01','社会科学图书借阅(A区)','3',100);
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('3-02','社会科学图书借阅(B区)','3',100);
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('3-03','多媒体阅览','3',100);
+
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('4-01','社会科学图书借阅(C区)','4',100);
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('4-02','外文图书借阅','4',100);
+
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('5-01','学术期刊阅览','5',100);
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('5-02','工科特色文献阅览','5',100);
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('5-03','江大文库','5',100);
+
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('6-01','工具书阅览','6',100);
+insert into reading_room(reading_room_id, reading_room_name, floor_id, seat_count) values('6-02','古籍阅览','6',100);
+
+
+create table seat_status (
+    seat_status tinyint(2) not null comment '座位使用状态',
+    seat_status_name varchar(32) comment '座位使用状态描述',
+    primary key(seat_status)
+) comment '座位状态表' ;
+
+insert into seat_status values(0,'空闲');
+insert into seat_status values(1,'被预约');
+insert into seat_status values(2,'在用');
+insert into seat_status values(3,'暂离');
+insert into seat_status values(4,'不可用');
 
 create table seat (
     seat_id varchar(32) not null comment '座位编号',
@@ -148,14 +195,22 @@ create table seat (
     foreign key(reading_room_id) references reading_room(reading_room_id) on delete set null
 ) comment '座位表' ;
 
-insert into seat(seat_id, reading_room_id) values('101-1001-10001','101-1001');
-insert into seat(seat_id, reading_room_id) values('101-1001-10002','101-1001');
-insert into seat(seat_id, reading_room_id) values('101-1001-10003','101-1002');
-insert into seat(seat_id, reading_room_id) values('101-1001-10004','101-1002');
-insert into seat(seat_id, reading_room_id) values('101-1001-10005','101-1004');
-insert into seat(seat_id, reading_room_id) values('101-1001-10006','101-1004');
-insert into seat(seat_id, reading_room_id) values('101-1001-10007','101-1005');
-insert into seat(seat_id, reading_room_id) values('101-1001-10008','101-1005');
+insert into seat(seat_id, reading_room_id) values('1-01-001','1-01');
+insert into seat(seat_id, reading_room_id) values('1-01-002','1-01');
+insert into seat(seat_id, reading_room_id) values('1-01-003','1-01');
+insert into seat(seat_id, reading_room_id) values('1-01-004','1-01');
+insert into seat(seat_id, reading_room_id) values('1-01-005','1-01');
+insert into seat(seat_id, reading_room_id) values('1-01-006','1-01');
+insert into seat(seat_id, reading_room_id) values('1-01-007','1-01');
+insert into seat(seat_id, reading_room_id) values('1-01-008','1-01');
+update reading_room set seat_count = 8 where reading_room_id = '1-01';
+--insert into seat(seat_id, reading_room_id) values('101-1001-10002','101-1001');
+--insert into seat(seat_id, reading_room_id) values('101-1001-10003','101-1002');
+--insert into seat(seat_id, reading_room_id) values('101-1001-10004','101-1002');
+--insert into seat(seat_id, reading_room_id) values('101-1001-10005','101-1004');
+--insert into seat(seat_id, reading_room_id) values('101-1001-10006','101-1004');
+--insert into seat(seat_id, reading_room_id) values('101-1001-10007','101-1005');
+--insert into seat(seat_id, reading_room_id) values('101-1001-10008','101-1005');
 
 create table reservation (
     id int not null auto_increment comment '自增主键',
@@ -251,10 +306,3 @@ create table blacklist (
 
 insert into blacklist(user_id, inobservance_type_id, count,create_time) values('3140602023',3,1,'2017-12-26 12:12:12');
 
-
-
-
-
-
-
-insert into blacklist(user_id,inobservance_type_id)

@@ -1,8 +1,12 @@
 package cn.edu.ujs.service.impl;
 
+import cn.edu.ujs.entity.ReadingRoom;
 import cn.edu.ujs.entity.Seat;
+import cn.edu.ujs.mapper.SeatMapper;
+import cn.edu.ujs.repository.ReadingRoomRepository;
 import cn.edu.ujs.repository.SeatRepository;
 import cn.edu.ujs.service.SeatService;
+import com.sun.prism.ReadbackRenderTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +20,12 @@ public class SeatServiceImpl implements SeatService {
 
     @Autowired
     private SeatRepository seatRepository;
+
+    @Autowired
+    private ReadingRoomRepository readingRoomRepository;
+
+    @Autowired
+    private SeatMapper seatMapper;
 
     @Override
     public Seat save(Seat seat) {
@@ -68,5 +78,26 @@ public class SeatServiceImpl implements SeatService {
     public Integer findUsableCountByReadingRoom(Integer seatStatus, String readingRoomId) {
         return seatRepository.findUsableCountByReadingRoom(seatStatus, readingRoomId);
     }
+
+    @Override
+    public Integer deleteOneSeat(String seatId) {
+        Seat seat = seatRepository.findOne(seatId);
+        ReadingRoom readingRoom = readingRoomRepository.findOne(seat.getReadingRoomId());
+        Integer result = seatMapper.deleteOneSeat(seatId);
+        if (result == 1) {
+            readingRoom.setSeatCount(readingRoom.getSeatCount()-1);
+            readingRoomRepository.save(readingRoom);
+        }
+        return result;
+    }
+
+    @Override
+    public Integer deleteManySeats(List<String> seatIdList) {
+        for (String seatId : seatIdList) {
+            deleteOneSeat(seatId);
+        }
+        return seatIdList.size();
+    }
+
 
 }

@@ -39,4 +39,10 @@ public interface SeatService {
     /**查询阅览室里可用的座位数量*/
     public Integer findUsableCountByReadingRoom(Integer seatStatus, String readingRoomId);
 
+    /**删除一个座位*/
+    public Integer deleteOneSeat(String seatId);
+
+    /**批量删除座位*/
+    public Integer deleteManySeats(List<String> seatIdList);
+
 }
